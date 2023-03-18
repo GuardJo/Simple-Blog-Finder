@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class BlogSearchController {
     @GetMapping(BlogSearchConstant.REQUEST_BLOG_SEARCH_URL)
-    public KakaoBlogSearchResponse searchBlog(@RequestParam String query,
+    public KakaoBlogSearchResponse searchBlog(@RequestParam String searchValue,
                                               @PageableDefault(size = 10, sort = BlogSearchConstant.SEARCH_SORT_TYPE_ACCURACY, direction = Sort.Direction.DESC) Pageable pageable) {
-        log.info("[Test] Request Search Blogs, query = {}", query);
+        log.info("[Test] Request Search Blogs, query = {}", searchValue);
         return null;
     }
 }

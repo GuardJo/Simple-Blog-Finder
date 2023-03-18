@@ -37,7 +37,7 @@ class BlogSearchControllerTest {
     void testDefaultBlogSearch() throws Exception {
         String actualResponse = mockMvc.perform(MockMvcRequestBuilders.get(
                                 BlogSearchConstant.REST_URL_PREFIX + BlogSearchConstant.REQUEST_BLOG_SEARCH_URL)
-                        .queryParam("query", "test"))
+                        .queryParam("searchValue", "test"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andReturn().getResponse().getContentAsString();
 
@@ -59,7 +59,7 @@ class BlogSearchControllerTest {
     @ValueSource(strings = {BlogSearchConstant.SEARCH_SORT_TYPE_ACCURACY, BlogSearchConstant.SEARCH_SORT_TYPE_RECENCY})
     void testSortTypeBlogSearch(String blogSearchSortType) throws Exception {
         MultiValueMap params = new LinkedMultiValueMap();
-        params.add("query", "test");
+        params.add("searchValue", "test");
         params.add("sort", blogSearchSortType);
 
         String actualResponse = mockMvc.perform(MockMvcRequestBuilders.get(
@@ -77,7 +77,7 @@ class BlogSearchControllerTest {
     @Test
     void testPaginationSearchBlog() throws Exception {
         MultiValueMap params = new LinkedMultiValueMap();
-        params.add("query", "test");
+        params.add("searchValue", "test");
         params.add("page", "0");
         params.add("size", "10");
 
