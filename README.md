@@ -19,5 +19,15 @@
 - 검색어 별로 검색된 횟수도 함께 조회 할 수 있다
 
 
+# 사용자 시나리오
+
+![UML](document/simple-blog-finder-uml.png)
+
+1. 블로그 검색
+    1. 검색 요청 시 블로그 검색 서비스를 통해 kakao의 블로그 검색 API 요청 및 응답 처리
+2. 인기 검색어 조회
+    1. 검색 시점에 검색어 관리 서비스에서 검색어를 별도 저장
+    2. 해당 검색어에 대한 카운팅 및 이후 랭킹 집계 등에 활용
+
 
 [Notion Link](https://trapezoidal-curiosity-d38.notion.site/Simple-Blog-Finder-26c6ff3d51ee47eb8107a68270824f21)
