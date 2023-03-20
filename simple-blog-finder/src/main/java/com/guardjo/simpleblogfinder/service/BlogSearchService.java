@@ -3,8 +3,13 @@ package com.guardjo.simpleblogfinder.service;
 import com.guardjo.simpleblogfinder.constant.BlogSearchConstant;
 import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchRequest;
 import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchResponse;
+import com.guardjo.simpleblogfinder.dto.SearchTermDto;
+import com.guardjo.simpleblogfinder.repository.SearchTermRepository;
 import io.netty.util.CharsetUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -14,14 +19,18 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class BlogSearchService {
     private final WebClient webClient;
+    private final SearchTermRepository searchTermRepository;
 
-    public BlogSearchService(@Autowired WebClient webClient) {
+    public BlogSearchService(WebClient webClient, SearchTermRepository searchTermRepository) {
         this.webClient = webClient;
+        this.searchTermRepository = searchTermRepository;
     }
 
     public KakaoBlogSearchResponse searchBlogs(KakaoBlogSearchRequest request) {
@@ -42,5 +51,17 @@ public class BlogSearchService {
                 .block();
 
         return response;
+    }
+
+    public List<SearchTermDto> findSearchTermRanking() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "totalCount");
+
+        List<SearchTermDto> searchTermDtos = searchTermRepository.findAll(pageable)
+                .getContent()
+                .stream()
+                .map(SearchTermDto::from)
+                .collect(Collectors.toList());
+
+        return searchTermDtos;
     }
 }
