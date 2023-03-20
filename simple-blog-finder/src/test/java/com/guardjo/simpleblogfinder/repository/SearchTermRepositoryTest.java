@@ -1,6 +1,7 @@
 package com.guardjo.simpleblogfinder.repository;
 
 import com.guardjo.simpleblogfinder.domain.SearchTerm;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +61,24 @@ class SearchTermRepositoryTest {
 
         assertThat(topCount).isEqualTo(TEST_DATA_MOST_COUNT);
         assertThat(bottomCount).isEqualTo(TEST_DATA_WORST_COUNT);
+    }
+
+    @DisplayName("특정 검색어로 SearchTerm 조회 테스트")
+    @Test
+    void testFindSearchTermBySearchTermValue() {
+        SearchTerm searchTerm = searchTermRepository.findSearchTermBySearchTermValueEqualsIgnoreCase("Dannye Vasiljevic").orElseThrow();
+
+        assertThat(searchTerm)
+                .hasFieldOrPropertyWithValue("searchTermValue", "Dannye Vasiljevic")
+                .hasFieldOrPropertyWithValue("id", 1L)
+                .hasFieldOrPropertyWithValue("totalCount", 50L);
+    }
+
+    @DisplayName("이미 저장되었던 검색어 중 일부 단어로 조회 테스트")
+    @Test
+    void testFindSearchTermBySearchTermContainingValue() {
+        Optional<SearchTerm> searchTerm = searchTermRepository.findSearchTermBySearchTermValueEqualsIgnoreCase("Dannye");
+
+        assertThat(searchTerm.isEmpty()).isTrue();
     }
 }
