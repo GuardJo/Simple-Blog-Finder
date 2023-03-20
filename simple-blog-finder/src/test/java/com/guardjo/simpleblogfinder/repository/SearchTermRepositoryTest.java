@@ -1,6 +1,7 @@
 package com.guardjo.simpleblogfinder.repository;
 
 import com.guardjo.simpleblogfinder.domain.SearchTerm;
+import com.guardjo.simpleblogfinder.dto.SearchTermDto;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -80,5 +81,14 @@ class SearchTermRepositoryTest {
         Optional<SearchTerm> searchTerm = searchTermRepository.findSearchTermBySearchTermValueEqualsIgnoreCase("Dannye");
 
         assertThat(searchTerm.isEmpty()).isTrue();
+    }
+
+    @DisplayName("SearchTerm Entity 호출 시마다 totalCount 증가 테스트")
+    @Test
+    void testAutoIncreaseCount() {
+        SearchTerm searchTerm1 = searchTermRepository.findById(1L).orElseThrow();
+
+        // data.json 내 입력 시 값은 50이지만 @PostLoad 에 의해 Auto Increase됨
+        assertThat(searchTerm1.getTotalCount()).isEqualTo(51L);
     }
 }

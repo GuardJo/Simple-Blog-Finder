@@ -21,9 +21,14 @@ public class SearchTerm {
     @Column(name = "SEARCH_TERM_ID")
     private Long id;
     private String searchTermValue;
-    private long totalCount;
+    private long totalCount = 1;
 
     protected SearchTerm() {
 
+    }
+
+    @PostLoad
+    public void autoIncreaseCount() {
+        this.totalCount++;
     }
 }
