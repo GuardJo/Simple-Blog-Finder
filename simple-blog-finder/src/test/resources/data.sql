@@ -1,0 +1,10 @@
+insert into SEARCH_TERM (SEARCH_TERM_ID, SEARCH_TERM_VALUE, TOTAL_COUNT) values (1, 'Dannye Vasiljevic', 50);
+insert into SEARCH_TERM (SEARCH_TERM_ID, SEARCH_TERM_VALUE, TOTAL_COUNT) values (2, 'Josey Gowthorpe', 22);
+insert into SEARCH_TERM (SEARCH_TERM_ID, SEARCH_TERM_VALUE, TOTAL_COUNT) values (3, 'Ros Grene', 85);
+insert into SEARCH_TERM (SEARCH_TERM_ID, SEARCH_TERM_VALUE, TOTAL_COUNT) values (4, 'Alyssa Walbridge', 40);
+insert into SEARCH_TERM (SEARCH_TERM_ID, SEARCH_TERM_VALUE, TOTAL_COUNT) values (5, 'Redford Clissell', 50);
+insert into SEARCH_TERM (SEARCH_TERM_ID, SEARCH_TERM_VALUE, TOTAL_COUNT) values (6, 'Willow Patifield', 94);
+insert into SEARCH_TERM (SEARCH_TERM_ID, SEARCH_TERM_VALUE, TOTAL_COUNT) values (7, 'Budd Ostler', 63);
+insert into SEARCH_TERM (SEARCH_TERM_ID, SEARCH_TERM_VALUE, TOTAL_COUNT) values (8, 'Stinky Helleckas', 23);
+insert into SEARCH_TERM (SEARCH_TERM_ID, SEARCH_TERM_VALUE, TOTAL_COUNT) values (9, 'Marita Rubberts', 13);
+insert into SEARCH_TERM (SEARCH_TERM_ID, SEARCH_TERM_VALUE, TOTAL_COUNT) values (10, 'Burlie Lillecrop', 51);
