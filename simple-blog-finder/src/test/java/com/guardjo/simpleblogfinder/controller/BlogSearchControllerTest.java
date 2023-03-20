@@ -35,6 +35,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -54,6 +55,7 @@ class BlogSearchControllerTest {
     private SearchManagementService searchManagementService;
 
     private static KakaoBlogSearchResponse TEST_RESPONSE = TestDataGenerator.generateKakaoBlogSearchResponse();
+    private static SearchTermDto TEST_SEARCH_TERM_DTO = SearchTermDto.from(TestDataGenerator.generateSearchTerm(1L));
 
     BlogSearchControllerTest(@Autowired MockMvc mockMvc, @Autowired ObjectMapper objectMapper) {
         this.mockMvc = mockMvc;
@@ -64,6 +66,7 @@ class BlogSearchControllerTest {
     @Test
     void testDefaultBlogSearch() throws Exception {
         given(blogSearchService.searchBlogs(any(KakaoBlogSearchRequest.class))).willReturn(TEST_RESPONSE);
+        given(searchManagementService.findSearchTerm(anyString())).willReturn(TEST_SEARCH_TERM_DTO);
 
         String actualResponse = mockMvc.perform(get(
                         BlogSearchConstant.REST_URL_PREFIX + BlogSearchConstant.REQUEST_BLOG_SEARCH_URL)
@@ -113,6 +116,7 @@ class BlogSearchControllerTest {
     @ValueSource(strings = {BlogSearchConstant.SEARCH_SORT_TYPE_ACCURACY, BlogSearchConstant.SEARCH_SORT_TYPE_RECENCY})
     void testSortTypeBlogSearch(String blogSearchSortType) throws Exception {
         given(blogSearchService.searchBlogs(any(KakaoBlogSearchRequest.class))).willReturn(TEST_RESPONSE);
+        given(searchManagementService.findSearchTerm(anyString())).willReturn(TEST_SEARCH_TERM_DTO);
 
         MultiValueMap params = new LinkedMultiValueMap();
         params.add("searchValue", "test");
@@ -134,6 +138,7 @@ class BlogSearchControllerTest {
     @Test
     void testPaginationSearchBlog() throws Exception {
         given(blogSearchService.searchBlogs(any(KakaoBlogSearchRequest.class))).willReturn(TEST_RESPONSE);
+        given(searchManagementService.findSearchTerm(anyString())).willReturn(TEST_SEARCH_TERM_DTO);
 
         MultiValueMap params = new LinkedMultiValueMap();
         params.add("searchValue", "test");
