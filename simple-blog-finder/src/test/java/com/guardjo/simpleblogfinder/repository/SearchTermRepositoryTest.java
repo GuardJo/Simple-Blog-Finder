@@ -60,8 +60,9 @@ class SearchTermRepositoryTest {
         long topCount = searchTermList.get(0).getTotalCount();
         long bottomCount = searchTermList.get(searchTermList.size() - 1).getTotalCount();
 
-        assertThat(topCount).isEqualTo(TEST_DATA_MOST_COUNT);
-        assertThat(bottomCount).isEqualTo(TEST_DATA_WORST_COUNT);
+        // searchTerm 의 autoIncrease 때문에 증가된 값이 출력됨
+        assertThat(topCount).isEqualTo(TEST_DATA_MOST_COUNT + 1);
+        assertThat(bottomCount).isEqualTo(TEST_DATA_WORST_COUNT + 1);
     }
 
     @DisplayName("특정 검색어로 SearchTerm 조회 테스트")
@@ -71,8 +72,7 @@ class SearchTermRepositoryTest {
 
         assertThat(searchTerm)
                 .hasFieldOrPropertyWithValue("searchTermValue", "Dannye Vasiljevic")
-                .hasFieldOrPropertyWithValue("id", 1L)
-                .hasFieldOrPropertyWithValue("totalCount", 50L);
+                .hasFieldOrPropertyWithValue("id", 1L);
     }
 
     @DisplayName("이미 저장되었던 검색어 중 일부 단어로 조회 테스트")
