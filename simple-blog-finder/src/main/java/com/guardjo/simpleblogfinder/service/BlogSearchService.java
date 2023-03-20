@@ -6,6 +6,7 @@ import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchResponse;
 import com.guardjo.simpleblogfinder.dto.SearchTermDto;
 import com.guardjo.simpleblogfinder.repository.SearchTermRepository;
 import io.netty.util.CharsetUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class BlogSearchService {
     private final WebClient webClient;
     private final SearchTermRepository searchTermRepository;
@@ -34,6 +36,7 @@ public class BlogSearchService {
     }
 
     public KakaoBlogSearchResponse searchBlogs(KakaoBlogSearchRequest request) {
+        log.info("[Test] Blog Searching... query = {}", request.getQuery());
         URI uri = UriComponentsBuilder
                 .fromUriString(BlogSearchConstant.KAKAO_BLOG_SEARCH_API_URL)
                 .queryParam("query", request.getQuery())
@@ -50,10 +53,12 @@ public class BlogSearchService {
                 .bodyToMono(KakaoBlogSearchResponse.class)
                 .block();
 
+        log.info("[Test] Searched Blog Data, query = {}", request.getQuery());
         return response;
     }
 
     public List<SearchTermDto> findSearchTermRanking() {
+        log.info("[Test] Most 10 Populate SearchTerm, Calculating...");
         Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "totalCount");
 
         List<SearchTermDto> searchTermDtos = searchTermRepository.findAll(pageable)
@@ -62,6 +67,7 @@ public class BlogSearchService {
                 .map(SearchTermDto::from)
                 .collect(Collectors.toList());
 
+        log.info("[Test] Caculated Most 10 Populate SearchTerms!");
         return searchTermDtos;
     }
 }
