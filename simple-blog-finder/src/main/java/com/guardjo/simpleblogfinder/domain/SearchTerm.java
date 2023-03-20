@@ -2,13 +2,11 @@ package com.guardjo.simpleblogfinder.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(staticName = "of")
 @Entity
 @Table(name = "SEARCH_TERM",
 indexes = {
@@ -21,4 +19,8 @@ public class SearchTerm {
     private Long id;
     private String searchTermValue;
     private long totalCount;
+
+    protected SearchTerm() {
+
+    }
 }
