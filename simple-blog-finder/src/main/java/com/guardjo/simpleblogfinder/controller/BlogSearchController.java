@@ -5,6 +5,7 @@ import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchRequest;
 import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchResponse;
 import com.guardjo.simpleblogfinder.dto.SearchTermDto;
 import com.guardjo.simpleblogfinder.service.BlogSearchService;
+import com.guardjo.simpleblogfinder.service.SearchManagementService;
 import com.guardjo.simpleblogfinder.util.RequestChecker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,14 @@ import java.util.List;
 public class BlogSearchController {
     private final BlogSearchService blogSearchService;
     private final RequestChecker requestChecker;
+    private final SearchManagementService searchManagementService;
 
     public BlogSearchController(@Autowired BlogSearchService blogSearchService,
-                                @Autowired RequestChecker requestChecker) {
+                                @Autowired RequestChecker requestChecker,
+                                @Autowired SearchManagementService searchManagementService) {
         this.blogSearchService = blogSearchService;
         this.requestChecker = requestChecker;
+        this.searchManagementService = searchManagementService;
     }
 
     @GetMapping(BlogSearchConstant.REQUEST_BLOG_SEARCH_URL)
@@ -45,7 +49,7 @@ public class BlogSearchController {
     public List<SearchTermDto> findSearchTermRanking() {
         log.info("[Test] Request SearchTerm TOP10 Ranking");
 
-        return blogSearchService.findSearchTermRanking();
+        return searchManagementService.findSearchTermRanking();
     }
 
 }

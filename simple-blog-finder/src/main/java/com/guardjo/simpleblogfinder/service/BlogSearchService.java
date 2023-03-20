@@ -56,18 +56,4 @@ public class BlogSearchService {
         log.info("[Test] Searched Blog Data, query = {}", request.getQuery());
         return response;
     }
-
-    public List<SearchTermDto> findSearchTermRanking() {
-        log.info("[Test] Most 10 Populate SearchTerm, Calculating...");
-        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "totalCount");
-
-        List<SearchTermDto> searchTermDtos = searchTermRepository.findAll(pageable)
-                .getContent()
-                .stream()
-                .map(SearchTermDto::from)
-                .collect(Collectors.toList());
-
-        log.info("[Test] Caculated Most 10 Populate SearchTerms!");
-        return searchTermDtos;
-    }
 }

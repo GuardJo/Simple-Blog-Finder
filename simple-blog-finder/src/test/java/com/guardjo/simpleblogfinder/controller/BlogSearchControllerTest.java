@@ -8,6 +8,7 @@ import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchResponse;
 import com.guardjo.simpleblogfinder.dto.SearchTermDto;
 import com.guardjo.simpleblogfinder.exception.KakaoRequestException;
 import com.guardjo.simpleblogfinder.service.BlogSearchService;
+import com.guardjo.simpleblogfinder.service.SearchManagementService;
 import com.guardjo.simpleblogfinder.util.RequestChecker;
 import com.guardjo.simpleblogfinder.util.TestDataGenerator;
 import io.netty.util.CharsetUtil;
@@ -49,6 +50,8 @@ class BlogSearchControllerTest {
     private BlogSearchService blogSearchService;
     @MockBean
     private RequestChecker requestChecker;
+    @MockBean
+    private SearchManagementService searchManagementService;
 
     private static KakaoBlogSearchResponse TEST_RESPONSE = TestDataGenerator.generateKakaoBlogSearchResponse();
 
@@ -153,7 +156,7 @@ class BlogSearchControllerTest {
     @Test
     void testSearchTermRanking() throws Exception {
         List<SearchTermDto> expectedResponse = TestDataGenerator.generateSearchTermDtos();
-        given(blogSearchService.findSearchTermRanking()).willReturn(expectedResponse);
+        given(searchManagementService.findSearchTermRanking()).willReturn(expectedResponse);
 
         String actualResponse = mockMvc.perform(get(
                 BlogSearchConstant.REST_URL_PREFIX + BlogSearchConstant.REQUEST_BLOG_SEARCH_KEYWORD_TOP_TEN))
@@ -162,7 +165,7 @@ class BlogSearchControllerTest {
 
         String expectedResponseString = objectMapper.writeValueAsString(expectedResponse);
 
-        then(blogSearchService).should().findSearchTermRanking();
+        then(searchManagementService).should().findSearchTermRanking();
         assertThat(actualResponse).isEqualTo(expectedResponseString);
     }
 
