@@ -25,7 +25,6 @@ import static org.mockito.BDDMockito.given;
 class BlogSearchServiceTest {
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private WebClient webClient;
-
     @InjectMocks
     private BlogSearchService blogSearchService;
 

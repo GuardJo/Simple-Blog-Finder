@@ -1,14 +1,19 @@
 package com.guardjo.simpleblogfinder.util;
 
+import com.guardjo.simpleblogfinder.domain.SearchTerm;
 import com.guardjo.simpleblogfinder.dto.KakaoBlogDocument;
 import com.guardjo.simpleblogfinder.dto.KakaoBlogMetaData;
 import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchResponse;
+import com.guardjo.simpleblogfinder.dto.SearchTermDto;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TestDataGenerator {
+    private final static int RANKING_SIZE = 10;
+
     public static KakaoBlogMetaData generateKakaoBlogMetaData() {
         return new KakaoBlogMetaData(
                 5,
@@ -33,5 +38,24 @@ public class TestDataGenerator {
                 generateKakaoBlogMetaData(),
                 List.of(generateKakaoBlogDocument())
         );
+    }
+
+    public static SearchTerm generateSearchTerm(long count) {
+        return SearchTerm.of(count, "test value" + count, count);
+    }
+
+    public static List<SearchTerm> generateSearchTerms() {
+        List<SearchTerm> searchTerms = new ArrayList<>();
+        for (int i = RANKING_SIZE; i > 0; i--) {
+            searchTerms.add(generateSearchTerm(i));
+        }
+
+        return searchTerms;
+    }
+
+    public static List<SearchTermDto> generateSearchTermDtos() {
+        List<SearchTerm> searchTerms = generateSearchTerms();
+
+        return searchTerms.stream().map(SearchTermDto::from).collect(Collectors.toList());
     }
 }
