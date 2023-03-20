@@ -2,8 +2,9 @@ package com.guardjo.simpleblogfinder.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 @AllArgsConstructor(staticName = "of")
 public class KakaoBlogSearchRequest {
     private String query;

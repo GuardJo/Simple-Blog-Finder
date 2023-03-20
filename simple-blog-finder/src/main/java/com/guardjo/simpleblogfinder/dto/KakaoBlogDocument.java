@@ -2,12 +2,13 @@ package com.guardjo.simpleblogfinder.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
-@Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class KakaoBlogDocument {
