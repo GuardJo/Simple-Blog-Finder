@@ -3,11 +3,14 @@ package com.guardjo.simpleblogfinder.controller;
 import com.guardjo.simpleblogfinder.constant.BlogSearchConstant;
 import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchRequest;
 import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchResponse;
+import com.guardjo.simpleblogfinder.dto.SearchTermDto;
 import com.guardjo.simpleblogfinder.service.BlogSearchService;
 import com.guardjo.simpleblogfinder.util.RequestChecker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(BlogSearchConstant.REST_URL_PREFIX)
@@ -37,4 +40,12 @@ public class BlogSearchController {
 
         return response;
     }
+
+    @GetMapping(BlogSearchConstant.REQUEST_BLOG_SEARCH_KEYWORD_TOP_TEN)
+    public List<SearchTermDto> findSearchTermRanking() {
+        log.info("[Test] Request SearchTerm TOP10 Ranking");
+
+        return blogSearchService.findSearchTermRanking();
+    }
+
 }

@@ -5,6 +5,7 @@ import com.guardjo.simpleblogfinder.config.TestConfig;
 import com.guardjo.simpleblogfinder.constant.BlogSearchConstant;
 import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchRequest;
 import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchResponse;
+import com.guardjo.simpleblogfinder.dto.SearchTermDto;
 import com.guardjo.simpleblogfinder.exception.KakaoRequestException;
 import com.guardjo.simpleblogfinder.service.BlogSearchService;
 import com.guardjo.simpleblogfinder.util.RequestChecker;
@@ -27,6 +28,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -34,6 +36,8 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Import(TestConfig.class)
 @WebMvcTest(BlogSearchController.class)
@@ -58,10 +62,10 @@ class BlogSearchControllerTest {
     void testDefaultBlogSearch() throws Exception {
         given(blogSearchService.searchBlogs(any(KakaoBlogSearchRequest.class))).willReturn(TEST_RESPONSE);
 
-        String actualResponse = mockMvc.perform(MockMvcRequestBuilders.get(
-                                BlogSearchConstant.REST_URL_PREFIX + BlogSearchConstant.REQUEST_BLOG_SEARCH_URL)
+        String actualResponse = mockMvc.perform(get(
+                        BlogSearchConstant.REST_URL_PREFIX + BlogSearchConstant.REQUEST_BLOG_SEARCH_URL)
                         .queryParam("searchValue", "test"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString(CharsetUtil.UTF_8);
 
         String expectedResponseString = objectMapper.writeValueAsString(TEST_RESPONSE);
@@ -75,9 +79,9 @@ class BlogSearchControllerTest {
     void testNullSearch() throws Exception {
         given(blogSearchService.searchBlogs(any(KakaoBlogSearchRequest.class))).willReturn(TEST_RESPONSE);
 
-        mockMvc.perform(MockMvcRequestBuilders.get(
+        mockMvc.perform(get(
                         BlogSearchConstant.REST_URL_PREFIX + BlogSearchConstant.REQUEST_BLOG_SEARCH_URL))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                .andExpect(status().isBadRequest());
 
         then(blogSearchService).shouldHaveNoInteractions();
     }
@@ -93,10 +97,10 @@ class BlogSearchControllerTest {
         params.add("searchValue", "test");
         params.add(paramKey, paramValue);
 
-        mockMvc.perform(MockMvcRequestBuilders.get(
-                                BlogSearchConstant.REST_URL_PREFIX + BlogSearchConstant.REQUEST_BLOG_SEARCH_URL)
+        mockMvc.perform(get(
+                        BlogSearchConstant.REST_URL_PREFIX + BlogSearchConstant.REQUEST_BLOG_SEARCH_URL)
                         .queryParams(params))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                .andExpect(status().isBadRequest());
 
         then(blogSearchService).shouldHaveNoInteractions();
     }
@@ -111,10 +115,10 @@ class BlogSearchControllerTest {
         params.add("searchValue", "test");
         params.add("sort", blogSearchSortType);
 
-        String actualResponse = mockMvc.perform(MockMvcRequestBuilders.get(
-                                BlogSearchConstant.REST_URL_PREFIX + BlogSearchConstant.REQUEST_BLOG_SEARCH_URL)
+        String actualResponse = mockMvc.perform(get(
+                        BlogSearchConstant.REST_URL_PREFIX + BlogSearchConstant.REQUEST_BLOG_SEARCH_URL)
                         .queryParams(params))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString(CharsetUtil.UTF_8);
 
         String expectedResponseString = objectMapper.writeValueAsString(TEST_RESPONSE);
@@ -133,15 +137,32 @@ class BlogSearchControllerTest {
         params.add("page", "0");
         params.add("size", "10");
 
-        String actualResponse = mockMvc.perform(MockMvcRequestBuilders.get(
-                                BlogSearchConstant.REST_URL_PREFIX + BlogSearchConstant.REQUEST_BLOG_SEARCH_URL)
+        String actualResponse = mockMvc.perform(get(
+                        BlogSearchConstant.REST_URL_PREFIX + BlogSearchConstant.REQUEST_BLOG_SEARCH_URL)
                         .queryParams(params))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString(CharsetUtil.UTF_8);
 
         String expectedResponseString = objectMapper.writeValueAsString(TEST_RESPONSE);
 
         then(blogSearchService).should().searchBlogs(any(KakaoBlogSearchRequest.class));
+        assertThat(actualResponse).isEqualTo(expectedResponseString);
+    }
+
+    @DisplayName("인기검색어 랭킹 반환 테스트")
+    @Test
+    void testSearchTermRanking() throws Exception {
+        List<SearchTermDto> expectedResponse = TestDataGenerator.generateSearchTermDtos();
+        given(blogSearchService.findSearchTermRanking()).willReturn(expectedResponse);
+
+        String actualResponse = mockMvc.perform(get(
+                BlogSearchConstant.REST_URL_PREFIX + BlogSearchConstant.REQUEST_BLOG_SEARCH_KEYWORD_TOP_TEN))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(CharsetUtil.UTF_8);
+
+        String expectedResponseString = objectMapper.writeValueAsString(expectedResponse);
+
+        then(blogSearchService).should().findSearchTermRanking();
         assertThat(actualResponse).isEqualTo(expectedResponseString);
     }
 
