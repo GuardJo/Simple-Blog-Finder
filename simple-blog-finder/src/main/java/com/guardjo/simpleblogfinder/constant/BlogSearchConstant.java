@@ -1,6 +1,9 @@
 package com.guardjo.simpleblogfinder.constant;
 
 public class BlogSearchConstant {
+    // blog search api vender type
+    public final static String KAKAO_API = "kakao";
+
     // blog search sort type
     public final static String SEARCH_SORT_TYPE_ACCURACY = "accuracy";
     public final static String SEARCH_SORT_TYPE_RECENCY = "recency";

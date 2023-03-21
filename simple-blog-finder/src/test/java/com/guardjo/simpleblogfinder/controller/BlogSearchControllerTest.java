@@ -3,13 +3,13 @@ package com.guardjo.simpleblogfinder.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.guardjo.simpleblogfinder.config.TestConfig;
 import com.guardjo.simpleblogfinder.constant.BlogSearchConstant;
-import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchRequest;
-import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchResponse;
+import com.guardjo.simpleblogfinder.dto.kakao.KakaoBlogSearchRequest;
+import com.guardjo.simpleblogfinder.dto.kakao.KakaoBlogSearchResponse;
 import com.guardjo.simpleblogfinder.dto.SearchTermDto;
 import com.guardjo.simpleblogfinder.exception.KakaoRequestException;
 import com.guardjo.simpleblogfinder.service.BlogSearchService;
 import com.guardjo.simpleblogfinder.service.SearchManagementService;
-import com.guardjo.simpleblogfinder.util.RequestChecker;
+import com.guardjo.simpleblogfinder.util.kakaoBlogSearchRequestChecker;
 import com.guardjo.simpleblogfinder.util.TestDataGenerator;
 import io.netty.util.CharsetUtil;
 import org.junit.jupiter.api.DisplayName;
@@ -18,14 +18,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -50,7 +47,7 @@ class BlogSearchControllerTest {
     @MockBean
     private BlogSearchService blogSearchService;
     @MockBean
-    private RequestChecker requestChecker;
+    private kakaoBlogSearchRequestChecker kakaoBlogSearchRequestChecker;
     @MockBean
     private SearchManagementService searchManagementService;
 
@@ -92,12 +89,11 @@ class BlogSearchControllerTest {
         then(blogSearchService).shouldHaveNoInteractions();
     }
 
-    @DisplayName("요청 인자의 범위를 넘어섰을 경우 테스트")
+    @DisplayName("요청 인자의 범위를 넘어섰을 경우 테스트 (카카오)")
     @ParameterizedTest
     @MethodSource("getParameterTestData")
     void testBadRequestSearch(String paramKey, String paramValue) throws Exception {
-        given(blogSearchService.searchBlogs(any(KakaoBlogSearchRequest.class))).willReturn(TEST_RESPONSE);
-        given(requestChecker.blogSearchRequestValidate(any(KakaoBlogSearchRequest.class))).willThrow(KakaoRequestException.class);
+        given(blogSearchService.searchBlogs(any(KakaoBlogSearchRequest.class))).willThrow(new KakaoRequestException("test"));
 
         MultiValueMap params = new LinkedMultiValueMap();
         params.add("searchValue", "test");
@@ -108,7 +104,7 @@ class BlogSearchControllerTest {
                         .queryParams(params))
                 .andExpect(status().isBadRequest());
 
-        then(blogSearchService).shouldHaveNoInteractions();
+        then(blogSearchService).should().searchBlogs(any(KakaoBlogSearchRequest.class));
     }
 
     @DisplayName("정렬 옵션 별 블로그 검색 테스트")

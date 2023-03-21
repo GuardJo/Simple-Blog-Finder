@@ -1,9 +1,9 @@
 package com.guardjo.simpleblogfinder.util;
 
 import com.guardjo.simpleblogfinder.domain.SearchTerm;
-import com.guardjo.simpleblogfinder.dto.KakaoBlogDocument;
-import com.guardjo.simpleblogfinder.dto.KakaoBlogMetaData;
-import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchResponse;
+import com.guardjo.simpleblogfinder.dto.kakao.KakaoBlogDocument;
+import com.guardjo.simpleblogfinder.dto.kakao.KakaoBlogMetaData;
+import com.guardjo.simpleblogfinder.dto.kakao.KakaoBlogSearchResponse;
 import com.guardjo.simpleblogfinder.dto.SearchTermDto;
 
 import java.time.ZonedDateTime;
