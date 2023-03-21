@@ -1,41 +1,31 @@
 package com.guardjo.simpleblogfinder.service;
 
 import com.guardjo.simpleblogfinder.constant.BlogSearchConstant;
-import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchRequest;
-import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchResponse;
-import com.guardjo.simpleblogfinder.dto.SearchTermDto;
-import com.guardjo.simpleblogfinder.repository.SearchTermRepository;
+import com.guardjo.simpleblogfinder.dto.kakao.KakaoBlogSearchRequest;
+import com.guardjo.simpleblogfinder.dto.kakao.KakaoBlogSearchResponse;
+import com.guardjo.simpleblogfinder.util.kakaoBlogSearchRequestChecker;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class BlogSearchService {
-    private final WebClient webClient;
-    private final SearchTermRepository searchTermRepository;
+    private final WebClient kakaoWebClient;
+    private final kakaoBlogSearchRequestChecker kakaoBlogSearchRequestChecker;
 
-    public BlogSearchService(WebClient webClient, SearchTermRepository searchTermRepository) {
-        this.webClient = webClient;
-        this.searchTermRepository = searchTermRepository;
+    public BlogSearchService(WebClient kakaoWebClient, kakaoBlogSearchRequestChecker kakaoBlogSearchRequestChecker) {
+        this.kakaoWebClient = kakaoWebClient;
+        this.kakaoBlogSearchRequestChecker = kakaoBlogSearchRequestChecker;
     }
 
     public KakaoBlogSearchResponse searchBlogs(KakaoBlogSearchRequest request) {
+        kakaoBlogSearchRequestChecker.blogSearchRequestValidate(request);
+
         log.info("[Test] Blog Searching... query = {}", request.getQuery());
         URI uri = UriComponentsBuilder
                 .fromUriString(BlogSearchConstant.KAKAO_BLOG_SEARCH_API_URL)
@@ -47,7 +37,7 @@ public class BlogSearchService {
                 .build()
                 .toUri();
 
-        KakaoBlogSearchResponse response = webClient.get()
+        KakaoBlogSearchResponse response = kakaoWebClient.get()
                 .uri(uri)
                 .retrieve()
                 .bodyToMono(KakaoBlogSearchResponse.class)

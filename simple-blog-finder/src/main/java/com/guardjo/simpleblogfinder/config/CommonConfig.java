@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,7 @@ public class CommonConfig {
     @Value("${KAKAO_REST_API_KEY}")
     private String KAKAO_REST_API_KEY;
     @Bean
+    @Qualifier("kakaoWebClient")
     public WebClient webClient() {
         return WebClient.builder()
                 .defaultHeader(HttpHeaders.AUTHORIZATION, KAKAO_REST_API_HEADER_PREFIX + " " + KAKAO_REST_API_KEY)

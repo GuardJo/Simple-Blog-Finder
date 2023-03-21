@@ -1,4 +1,4 @@
-package com.guardjo.simpleblogfinder.dto;
+package com.guardjo.simpleblogfinder.dto.kakao;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

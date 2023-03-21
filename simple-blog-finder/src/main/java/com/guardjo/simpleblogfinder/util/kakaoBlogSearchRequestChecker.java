@@ -1,14 +1,14 @@
 package com.guardjo.simpleblogfinder.util;
 
 import com.guardjo.simpleblogfinder.constant.BlogSearchConstant;
-import com.guardjo.simpleblogfinder.dto.KakaoBlogSearchRequest;
+import com.guardjo.simpleblogfinder.dto.kakao.KakaoBlogSearchRequest;
 import com.guardjo.simpleblogfinder.exception.KakaoRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class RequestChecker {
+public class kakaoBlogSearchRequestChecker {
     private final static int MAX_COUNT = 50;
     private final static int MIN_COUNT = 1;
 

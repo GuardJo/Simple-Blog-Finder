@@ -1,4 +1,4 @@
-package com.guardjo.simpleblogfinder.dto;
+package com.guardjo.simpleblogfinder.dto.kakao;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
