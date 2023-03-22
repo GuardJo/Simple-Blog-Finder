@@ -39,12 +39,17 @@ public class SearchManagementService {
         return searchTermDtos;
     }
 
-    public SearchTermDto findSearchTerm(String searchValue) {
-        log.info("[Test] Find SearchTerm, searchTermValue = {}", searchValue);
+    public void countSearchTerm(String searchValue) {
 
         Optional<SearchTerm> searchTerm = searchTermRepository.findSearchTermBySearchTermValueEqualsIgnoreCase(searchValue);
 
-        return SearchTermDto.from((searchTerm.isEmpty()) ? saveSearchTerm(searchValue) : searchTerm.get());
+        if (searchTerm.isEmpty()) {
+            saveSearchTerm(searchValue);
+        } else {
+            searchTerm.get().increaseCount();
+        }
+
+        log.info("[Test] Counted SearchTerm, searchTermValue = {}", searchValue);
     }
 
     private SearchTerm saveSearchTerm(String searchValue) {

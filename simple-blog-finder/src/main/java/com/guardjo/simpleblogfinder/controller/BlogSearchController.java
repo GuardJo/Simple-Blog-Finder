@@ -48,8 +48,7 @@ public class BlogSearchController {
                 response = blogSearchService.searchBlogs((KakaoBlogSearchRequest) request);
         }
 
-        SearchTermDto searchTermDto = searchManagementService.findSearchTerm(searchValue);
-        log.debug("[Test] Searched! searchTermDto = {}", searchTermDto.toString());
+        searchManagementService.countSearchTerm(searchValue);
 
         return response;
     }

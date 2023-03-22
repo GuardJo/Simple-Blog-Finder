@@ -60,9 +60,8 @@ class SearchTermRepositoryTest {
         long topCount = searchTermList.get(0).getTotalCount();
         long bottomCount = searchTermList.get(searchTermList.size() - 1).getTotalCount();
 
-        // searchTerm 의 autoIncrease 때문에 증가된 값이 출력됨
-        assertThat(topCount).isEqualTo(TEST_DATA_MOST_COUNT + 1);
-        assertThat(bottomCount).isEqualTo(TEST_DATA_WORST_COUNT + 1);
+        assertThat(topCount).isEqualTo(TEST_DATA_MOST_COUNT);
+        assertThat(bottomCount).isEqualTo(TEST_DATA_WORST_COUNT);
     }
 
     @DisplayName("특정 검색어로 SearchTerm 조회 테스트")
@@ -83,12 +82,18 @@ class SearchTermRepositoryTest {
         assertThat(searchTerm.isEmpty()).isTrue();
     }
 
-    @DisplayName("SearchTerm Entity 호출 시마다 totalCount 증가 테스트")
+    @DisplayName("SearchTerm Entity 객체 내 totalCount 갱신 테스트")
     @Test
-    void testAutoIncreaseCount() {
-        SearchTerm searchTerm1 = searchTermRepository.findById(1L).orElseThrow();
+    void testIncreaeCountSearchTerm() {
+        SearchTerm searchTerm = searchTermRepository.findById(1L).orElseThrow();
+        searchTerm.increaseCount();
+        long expectedCount = searchTerm.getTotalCount();
+        
+        searchTermRepository.flush();
 
-        // data.json 내 입력 시 값은 50이지만 @PostLoad 에 의해 Auto Increase됨
-        assertThat(searchTerm1.getTotalCount()).isEqualTo(51L);
+        SearchTerm afterSearchTerm = searchTermRepository.findById(1L).orElseThrow();
+        long actualCount = afterSearchTerm.getTotalCount();
+
+        assertThat(actualCount).isEqualTo(expectedCount);
     }
 }

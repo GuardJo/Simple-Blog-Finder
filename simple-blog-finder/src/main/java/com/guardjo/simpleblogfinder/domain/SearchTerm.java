@@ -27,8 +27,7 @@ public class SearchTerm {
 
     }
 
-    @PostLoad
-    public void autoIncreaseCount() {
+    public void increaseCount() {
         this.totalCount++;
     }
 }
