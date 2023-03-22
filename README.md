@@ -3,7 +3,7 @@
 > 각종 블로그 정보 검색 및 조회 서비스
 > 
 
-[실행 파일 다운로드](https://github.com/GuardJo/Simple-Blog-Finder/raw/main/executable-jar/simple-blog-finder-1.0.0-SNAPSHOT.jar)
+[실행 파일 다운로드](https://github.com/GuardJo/Simple-Blog-Finder/raw/main/executable-jar/simple-blog-finder-1.1.0-SNAPSHOT.jar)
 
 # 요구사항
 
