@@ -67,3 +67,5 @@
 ```
 
 [Notion Link](https://trapezoidal-curiosity-d38.notion.site/Simple-Blog-Finder-26c6ff3d51ee47eb8107a68270824f21)
+
+[Eextuable Jar](executable-jar/simple-blog-finder-1.0.0-SNAPSHOT.jar)
