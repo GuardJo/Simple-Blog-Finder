@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 public class CommonConfig {
     private final static String KAKAO_REST_API_HEADER_PREFIX = "KakaoAK";
 
-    @Value("${KAKAO_REST_API_KEY}")
+    @Value("${search-api-key}")
     private String KAKAO_REST_API_KEY;
     @Bean
     @Qualifier("kakaoWebClient")

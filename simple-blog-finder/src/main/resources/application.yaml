@@ -30,3 +30,4 @@ springdoc:
       enabled: true
   cache:
     disabled: true
+search-api-key : ${KAKAO_REST_API_KEY}
