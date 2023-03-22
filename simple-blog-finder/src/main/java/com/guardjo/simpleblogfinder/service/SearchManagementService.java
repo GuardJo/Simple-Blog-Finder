@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,12 +40,18 @@ public class SearchManagementService {
         return searchTermDtos;
     }
 
-    public SearchTermDto findSearchTerm(String searchValue) {
-        log.info("[Test] Find SearchTerm, searchTermValue = {}", searchValue);
+    @Async
+    public void countSearchTerm(String searchValue) {
 
         Optional<SearchTerm> searchTerm = searchTermRepository.findSearchTermBySearchTermValueEqualsIgnoreCase(searchValue);
 
-        return SearchTermDto.from((searchTerm.isEmpty()) ? saveSearchTerm(searchValue) : searchTerm.get());
+        if (searchTerm.isEmpty()) {
+            saveSearchTerm(searchValue);
+        } else {
+            searchTerm.get().increaseCount();
+        }
+
+        log.info("[Test] Counted SearchTerm, searchTermValue = {}", searchValue);
     }
 
     private SearchTerm saveSearchTerm(String searchValue) {

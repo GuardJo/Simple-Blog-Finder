@@ -33,8 +33,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -63,7 +62,7 @@ class BlogSearchControllerTest {
     @Test
     void testDefaultBlogSearch() throws Exception {
         given(blogSearchService.searchBlogs(any(KakaoBlogSearchRequest.class))).willReturn(TEST_RESPONSE);
-        given(searchManagementService.findSearchTerm(anyString())).willReturn(TEST_SEARCH_TERM_DTO);
+        willDoNothing().given(searchManagementService).countSearchTerm(anyString());
 
         String actualResponse = mockMvc.perform(get(
                         BlogSearchConstant.REST_URL_PREFIX + BlogSearchConstant.REQUEST_BLOG_SEARCH_URL)
@@ -74,6 +73,7 @@ class BlogSearchControllerTest {
         String expectedResponseString = objectMapper.writeValueAsString(TEST_RESPONSE);
 
         then(blogSearchService).should().searchBlogs(any(KakaoBlogSearchRequest.class));
+        then(searchManagementService).should().countSearchTerm(anyString());
         assertThat(actualResponse).isEqualTo(expectedResponseString);
     }
 
@@ -112,7 +112,7 @@ class BlogSearchControllerTest {
     @ValueSource(strings = {BlogSearchConstant.SEARCH_SORT_TYPE_ACCURACY, BlogSearchConstant.SEARCH_SORT_TYPE_RECENCY})
     void testSortTypeBlogSearch(String blogSearchSortType) throws Exception {
         given(blogSearchService.searchBlogs(any(KakaoBlogSearchRequest.class))).willReturn(TEST_RESPONSE);
-        given(searchManagementService.findSearchTerm(anyString())).willReturn(TEST_SEARCH_TERM_DTO);
+        willDoNothing().given(searchManagementService).countSearchTerm(anyString());
 
         MultiValueMap params = new LinkedMultiValueMap();
         params.add("searchValue", "test");
@@ -127,6 +127,7 @@ class BlogSearchControllerTest {
         String expectedResponseString = objectMapper.writeValueAsString(TEST_RESPONSE);
 
         then(blogSearchService).should().searchBlogs(any(KakaoBlogSearchRequest.class));
+        then(searchManagementService).should().countSearchTerm(anyString());
         assertThat(actualResponse).isEqualTo(expectedResponseString);
     }
 
@@ -134,7 +135,7 @@ class BlogSearchControllerTest {
     @Test
     void testPaginationSearchBlog() throws Exception {
         given(blogSearchService.searchBlogs(any(KakaoBlogSearchRequest.class))).willReturn(TEST_RESPONSE);
-        given(searchManagementService.findSearchTerm(anyString())).willReturn(TEST_SEARCH_TERM_DTO);
+        willDoNothing().given(searchManagementService).countSearchTerm(anyString());
 
         MultiValueMap params = new LinkedMultiValueMap();
         params.add("searchValue", "test");
@@ -150,6 +151,7 @@ class BlogSearchControllerTest {
         String expectedResponseString = objectMapper.writeValueAsString(TEST_RESPONSE);
 
         then(blogSearchService).should().searchBlogs(any(KakaoBlogSearchRequest.class));
+        then(searchManagementService).should().countSearchTerm(anyString());
         assertThat(actualResponse).isEqualTo(expectedResponseString);
     }
 

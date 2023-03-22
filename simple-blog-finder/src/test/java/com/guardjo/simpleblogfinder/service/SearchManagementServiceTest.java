@@ -82,9 +82,8 @@ class SearchManagementServiceTest {
         given(searchTermRepository.findSearchTermBySearchTermValueEqualsIgnoreCase(anyString()))
                 .willReturn(Optional.of(expectedData));
 
-        SearchTermDto actualData = searchManagementService.findSearchTerm("test");
+        searchManagementService.countSearchTerm("test");
 
-        assertThat(actualData).isEqualTo(SearchTermDto.from(expectedData));
         then(searchTermRepository).should().findSearchTermBySearchTermValueEqualsIgnoreCase(anyString());
         then(searchTermRepository).shouldHaveNoMoreInteractions();
     }
@@ -97,9 +96,8 @@ class SearchManagementServiceTest {
                 .willReturn(Optional.empty());
         given(searchTermRepository.save(any(SearchTerm.class))).willReturn(expectedData);
 
-        SearchTermDto actualData = searchManagementService.findSearchTerm("test");
+        searchManagementService.countSearchTerm("test");
 
-        assertThat(actualData).isEqualTo(SearchTermDto.from(expectedData));
         then(searchTermRepository).should().findSearchTermBySearchTermValueEqualsIgnoreCase(anyString());
         then(searchTermRepository).should().save(any(SearchTerm.class));
     }

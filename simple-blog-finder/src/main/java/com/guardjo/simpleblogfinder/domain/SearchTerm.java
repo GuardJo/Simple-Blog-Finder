@@ -3,6 +3,7 @@ package com.guardjo.simpleblogfinder.domain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -15,6 +16,7 @@ indexes = {
         @Index(name = "searchTermValue", columnList = "searchTermValue"),
         @Index(name = "totalCount", columnList = "totalCount")
 })
+@DynamicUpdate
 public class SearchTerm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +29,7 @@ public class SearchTerm {
 
     }
 
-    @PostLoad
-    public void autoIncreaseCount() {
+    public void increaseCount() {
         this.totalCount++;
     }
 }
